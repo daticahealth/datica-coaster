@@ -16,14 +16,14 @@ intersection() {
 module baseLogo () {
     color("blue")
         linear_extrude(0, 0, height)
-                difference() {
-                    circle(d = coasterDiameter, $fn = 60, center = true);
-                    scale(logoDiameter/10, logoDiameter/10, 1)
-                        // center the logo - it's off-center a little bit in the source image
-                        // internally, it's 10mm x 10mm
-                        translate([-5.3, -5.35, 0])
-                            import("datica-logo.dxf", center = true);
-                };
+            difference() {
+                circle(d = coasterDiameter, $fn = 60, center = true);
+                scale(logoDiameter/10, logoDiameter/10, 1)
+                    // center the logo - it's off-center a little bit in the source image
+                    // internally, it's 10mm x 10mm
+                    translate([-5.3, -5.35, 0])
+                        import("datica-logo.dxf", center = true);
+            };
 }
 
 module beveledDisk() {
