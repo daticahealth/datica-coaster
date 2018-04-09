@@ -4,13 +4,17 @@ height = 3; // mm
 // a standard coffee mug is about 90mm wide
 logoDiameter = 90; // mm
 coasterDiameter = 110; // mm
-bevelRadius = height/2; // mm
 
 // don't edit below here
 
 intersection() {
     baseLogo();
-    beveledDisk();
+    union() {
+        linear_extrude(0, 0, height/2)
+            circle(d = coasterDiameter, $fn = 60, center = true);
+        translate([0, 0, height/2])
+            curvedDisk();
+    };
 }
 
 module baseLogo () {
@@ -26,9 +30,16 @@ module baseLogo () {
             };
 }
 
-module beveledDisk() {
-    linear_extrude(0, 0, height/2)
-        circle(d = coasterDiameter, $fn = 60, center = true);
-    translate([0, 0, height/2])
-        cylinder(h = height/2, d1 = coasterDiameter, d2 = coasterDiameter - 2 * bevelRadius, $fn = 60, center = false);
+module curvedDisk(segments = 36, radius = height / 2) {
+    for (i = [0:segments-1]) {
+        previousAngle = 90/segments * (i - 1);
+        currentAngle = 90/segments * i;
+        translate([0, 0, radius * sin(previousAngle)])
+            cylinder(
+                h = radius * (sin(currentAngle) - sin(previousAngle)),
+                d1 = coasterDiameter - (2 * radius) + (2 * radius * cos(previousAngle)),
+                d2 = coasterDiameter - (2 * radius) + (2 * radius * cos(currentAngle)),
+                $fn = 60,
+                center = false);
+    }
 }
